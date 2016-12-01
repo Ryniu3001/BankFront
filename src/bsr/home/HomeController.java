@@ -1,4 +1,4 @@
-package home;
+package bsr.home;
 
 import javafx.fxml.Initializable;
 
