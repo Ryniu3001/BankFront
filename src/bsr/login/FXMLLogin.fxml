@@ -28,7 +28,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" spacing="30.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onLoginAction" prefWidth="100.0" text="Zaloguj" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onLoginAction" prefWidth="100.0" text="Zaloguj" />
             <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelAction" prefWidth="80.0" text="Anuluj" />
          </children>
       </HBox>

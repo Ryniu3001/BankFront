@@ -1,5 +1,6 @@
 package bsr.register;
 
+import bsr.ServiceUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import pl.bank.bsr.BankException;
+import pl.bank.bsr.FaultBean;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,7 +37,7 @@ public class RegisterController implements Initializable {
 
     @FXML
     public void onRegisterAction(ActionEvent event){
-/*        errorLabel.setText("");
+        errorLabel.setText("");
         String login = loginField.getText();
         String password = passwordField.getText();
         String name = nameField.getText();
@@ -44,7 +47,7 @@ public class RegisterController implements Initializable {
         } catch (BankException e) {
             FaultBean bean = e.getFaultInfo();
             errorLabel.setText(bean.getDetails());
-        }*/
+        }
 
     }
 

@@ -3,6 +3,8 @@ package bsr;
 import pl.bank.bsr.*;
 
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.Handler;
+import java.util.List;
 
 /**
  * Created by marcin on 01.12.16.
@@ -28,11 +30,22 @@ public class ServiceUtil {
         port.register(payload);
     }
 
+    public static AccountResponse addNewAccount(String uid) throws BankException {
+        BankPortType port = getBankServicePort();
+        NewAccountRequest payload = new NewAccountRequest();
+        payload.setUid(uid);
+        return port.createAccount(payload);
+    }
+
     private static BankPortType getBankServicePort(){
         BankService bankService = new BankService();
         BankPortType port = bankService.getBankPort();
         BindingProvider bp = (BindingProvider) port;
         bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:8188/soap/BankService");
+
+        List<Handler> handlerChain = bp.getBinding().getHandlerChain();
+        handlerChain.add(new SOAPHandler());
+        bp.getBinding().setHandlerChain(handlerChain);
         return port;
     }
 }
