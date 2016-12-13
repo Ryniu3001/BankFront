@@ -37,6 +37,15 @@ public class ServiceUtil {
         return port.createAccount(payload);
     }
 
+    public static DepositResponse deposit(String uid, String accNumber, Integer value) throws BankException {
+        BankPortType port = getBankServicePort();
+        DepositMsg payload = new DepositMsg();
+        payload.setUid(uid);
+        payload.setAccountNumber(accNumber);
+        payload.setAmount(value);
+        return port.deposit(payload);
+    }
+
     private static BankPortType getBankServicePort(){
         BankService bankService = new BankService();
         BankPortType port = bankService.getBankPort();

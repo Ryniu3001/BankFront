@@ -1,6 +1,7 @@
 package bsr.register;
 
 import bsr.ServiceUtil;
+import bsr.login.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,6 +45,7 @@ public class RegisterController implements Initializable {
         String surname = surnameField.getText();
         try {
             ServiceUtil.register(name, surname, login, password);
+            goToLoginPage(event, login, password);
         } catch (BankException e) {
             FaultBean bean = e.getFaultInfo();
             errorLabel.setText(bean.getDetails());
@@ -53,11 +55,20 @@ public class RegisterController implements Initializable {
 
     @FXML
     public void onCancelAction(ActionEvent event){
+        goToLoginPage(event, null, null);
+    }
+
+    private void goToLoginPage(ActionEvent event, String login, String password){
         double x = ((Node)(event.getSource())).getScene().getWindow().getX();
         double y = ((Node)(event.getSource())).getScene().getWindow().getY();
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getClassLoader().getResource("bsr/login/FXMLLogin.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("bsr/login/FXMLLogin.fxml"));
+            root = loader.load();
+            if (login != null){
+                LoginController controller = loader.getController();
+                controller.setCredentials(login, password);
+            }
             Stage stage = new Stage();
             stage.setTitle("Logowanie");
             stage.setScene(new Scene(root, 450, 450));

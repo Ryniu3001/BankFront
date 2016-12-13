@@ -99,4 +99,10 @@ public class LoginController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void setCredentials(String user, String password){
+        this.loginField.setText(user);
+        this.passwordField.setText(password);
+    }
+
 }

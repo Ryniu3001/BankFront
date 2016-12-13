@@ -1,6 +1,7 @@
 package bsr.home;
 
 import bsr.ServiceUtil;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,25 +10,40 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import pl.bank.bsr.AccountResponse;
 import pl.bank.bsr.BankException;
+import pl.bank.bsr.DepositResponse;
 import pl.bank.bsr.LoginResponse;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-/**
- * Created by marcin on 29.11.16.
- */
+import static bsr.home.Operation.transfer;
+
 public class HomeController implements Initializable {
     @FXML private Label nameLabel;
     @FXML private Label surnameLabel;
+    @FXML private Label balanceLabel;
+    private SimpleDoubleProperty balanceProperty;
+    @FXML private TextField nrbTf;
+    @FXML private TextField amountTf;
+    @FXML private TextField titleTf;
+    @FXML private Label nrbLabel;
+    @FXML private Label titleLabel;
+    @FXML private Label errorLabel;
     @FXML private ComboBox accountComboBox;
+    @FXML private ComboBox operationCb;
     private String uid;
     private ObservableList<Object> observableList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("init");
+        ObservableList<Object> operationList = FXCollections.observableArrayList();
+        operationList.addAll(transfer, Operation.deposit, Operation.withdraw);
+        this.operationCb.setItems(operationList);
+        this.operationCb.getSelectionModel().select(0);
+
+        this.balanceProperty = new SimpleDoubleProperty(-1);
+        this.balanceLabel.textProperty().bind(balanceProperty.asString());
     }
 
     public void initData(LoginResponse loginResponse){
@@ -40,12 +56,14 @@ public class HomeController implements Initializable {
         }
         observableList.add("Dodaj nowe konto");
         accountComboBox.setItems(observableList);
+        if (accountComboBox.getItems().size() > 1)
+            accountComboBox.getSelectionModel().select(0);
     }
 
     @FXML
     public void onChangeAccount(ActionEvent event){
-        System.out.println("Action");
         if (accountComboBox.getValue() != null && !accountComboBox.getValue().toString().isEmpty()){
+            //jesli wybrano dodaj nowe konto
             if (accountComboBox.getSelectionModel().getSelectedIndex() == accountComboBox.getItems().size() - 1){
                 if (showConfirmationDialog()){
                     try {
@@ -60,8 +78,28 @@ public class HomeController implements Initializable {
                     accountComboBox.setItems(null);
                     accountComboBox.setItems(this.observableList);
                 }
+                //jesli wybrano konto
+            } else {
+                Account acc = (Account) accountComboBox.getSelectionModel().getSelectedItem();
+                this.balanceProperty.setValue(acc.getBalance() / 100.0);
             }
         }
+    }
+
+    @FXML
+    public void onChangeOperation(ActionEvent event){
+        if (((Operation)this.operationCb.getSelectionModel().getSelectedItem()).name().equals(transfer.name())){
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
+    }
+
+    private void setVisible(boolean value){
+        this.titleTf.visibleProperty().setValue(value);
+        this.nrbTf.visibleProperty().setValue(value);
+        this.nrbLabel.visibleProperty().setValue(value);
+        this.titleLabel.visibleProperty().setValue(value);
     }
 
     private boolean showConfirmationDialog(){
@@ -78,5 +116,53 @@ public class HomeController implements Initializable {
         } else {
             return false;
         }
+    }
+
+    @FXML
+    public void onExecuteChange(ActionEvent event){
+        this.errorLabel.setText("");
+        try {
+            if (validateInputs()) {
+                Integer amount = getAmountInteger();
+                String nrb = ((Account)this.accountComboBox.getSelectionModel().getSelectedItem()).getAccountNbr();
+                switch (((Operation) this.operationCb.getSelectionModel().getSelectedItem())) {
+                    case transfer:
+                        System.out.println("asd");
+                        break;
+                    case deposit:
+                        DepositResponse response = ServiceUtil.deposit(this.uid, nrb, amount);
+                        updateBalance(response.getBalance());
+                        break;
+                    case withdraw:
+                        System.out.println("asd");
+                        break;
+                    default:
+                        System.out.println("default");
+                        break;
+                }
+
+            }
+        } catch (Exception e){
+            this.errorLabel.setText(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private Integer getAmountInteger(){
+        String amountStr = this.amountTf.getText();
+        amountStr = amountStr.replace(",", ".");
+        Double amountDouble = Double.valueOf(amountStr) * 100;
+        Integer amount = amountDouble.intValue();
+        return amount;
+    }
+
+    private void updateBalance(Integer newBalance){
+        Account acc = (Account) this.accountComboBox.getSelectionModel().getSelectedItem();
+        acc.setBalance(newBalance);
+        this.balanceProperty.setValue(newBalance / 100.0);
+    }
+
+    private boolean validateInputs(){
+        return true;
     }
 }

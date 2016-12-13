@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="396.0" prefWidth="559.0" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bsr.home.HomeController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="396.0" prefWidth="600.0" stylesheets="@../../gui.css" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bsr.home.HomeController">
            <children>
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="539.0" spacing="10.0">
          <children>
@@ -31,7 +31,7 @@
          <children>
                   <Label maxWidth="100.0" prefHeight="16.0" prefWidth="80.0" text="Konto" />
             <ComboBox fx:id="accountComboBox" onAction="#onChangeAccount" prefHeight="26.0" HBox.hgrow="ALWAYS" />
-                  <Label text="Stan" textFill="#01a136">
+                  <Label prefHeight="16.0" prefWidth="45.0" text="Stan:">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -39,7 +39,12 @@
                   <Insets left="20.0" />
                </HBox.margin>
                   </Label>
-                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="Historia" textAlignment="RIGHT">
+            <Label fx:id="balanceLabel" textFill="#00800d">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+                  <Button alignment="CENTER_RIGHT" maxWidth="100.0" minWidth="71.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="71.0" text="Historia" textAlignment="RIGHT">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin></Button>
@@ -51,7 +56,7 @@
       <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="539.0" spacing="10.0">
          <children>
                   <Label prefWidth="80.0" text="Operacja" />
-            <ComboBox prefWidth="150.0" />
+            <ComboBox fx:id="operationCb" onAction="#onChangeOperation" prefWidth="150.0" />
          </children>
          <VBox.margin>
             <Insets bottom="30.0" />
@@ -60,7 +65,7 @@
       <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="539.0" spacing="10.0">
          <children>
                   <Label prefWidth="80.0" text="Kwota" />
-                  <TextField prefHeight="26.0" prefWidth="137.0" />
+                  <TextField fx:id="amountTf" prefHeight="26.0" prefWidth="137.0" promptText="Kwota transakcji" />
          </children>
          <VBox.margin>
             <Insets bottom="10.0" />
@@ -68,8 +73,8 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" spacing="10.0">
          <children>
-                  <Label prefWidth="80.0" text="Nr konta" />
-                  <TextField prefHeight="26.0" prefWidth="215.0" />
+                  <Label fx:id="nrbLabel" prefWidth="80.0" text="Nr konta" />
+                  <TextField fx:id="nrbTf" prefHeight="26.0" prefWidth="215.0" promptText="Numer konta odbiorcy" />
          </children>
          <VBox.margin>
             <Insets bottom="10.0" />
@@ -77,22 +82,30 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" spacing="10.0">
          <children>
-                  <Label prefWidth="80.0" text="Tytuł" />
-                  <TextField prefHeight="26.0" prefWidth="404.0" />
+                  <Label fx:id="titleLabel" prefWidth="80.0" text="Tytuł" />
+                  <TextField fx:id="titleTf" prefHeight="26.0" prefWidth="404.0" promptText="Tutuł transakcji" />
          </children>
          <VBox.margin>
             <Insets bottom="30.0" />
          </VBox.margin>
       </HBox>
-            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="536.0" text="WYKONAJ">
+      <HBox maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0">
+         <children>
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onExecuteChange" prefHeight="0.0" prefWidth="580.0" text="WYKONAJ" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+      <HBox maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="200.0">
+         <children>
+                  <Label fx:id="errorLabel" maxWidth="1.7976931348623157E308" prefHeight="16.0" prefWidth="536.0" textFill="RED" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+         </children>
          <VBox.margin>
-            <Insets bottom="20.0" />
-         </VBox.margin></Button>
-            <Label fx:id="errorLabel" prefHeight="16.0" prefWidth="536.0" text="Label" textFill="RED">
-               <font>
-                  <Font name="System Bold" size="13.0" />
-               </font>
-            </Label>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </HBox>
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
