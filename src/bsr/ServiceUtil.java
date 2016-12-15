@@ -46,6 +46,11 @@ public class ServiceUtil {
         return port.deposit(payload);
     }
 
+    public static TransferResponse transfer(TransferRequest payload) throws BankException {
+        BankPortType port = getBankServicePort();
+        return port.transfer(payload);
+    }
+
     private static BankPortType getBankServicePort(){
         BankService bankService = new BankService();
         BankPortType port = bankService.getBankPort();

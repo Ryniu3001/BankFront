@@ -8,10 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import pl.bank.bsr.AccountResponse;
-import pl.bank.bsr.BankException;
-import pl.bank.bsr.DepositResponse;
-import pl.bank.bsr.LoginResponse;
+import pl.bank.bsr.*;
 
 import java.net.URL;
 import java.util.Optional;
@@ -56,8 +53,10 @@ public class HomeController implements Initializable {
         }
         observableList.add("Dodaj nowe konto");
         accountComboBox.setItems(observableList);
-        if (accountComboBox.getItems().size() > 1)
+        if (accountComboBox.getItems().size() > 1) {
             accountComboBox.getSelectionModel().select(0);
+            this.balanceProperty.setValue(((Account)accountComboBox.getSelectionModel().getSelectedItem()).getBalance());
+        }
     }
 
     @FXML
@@ -127,7 +126,9 @@ public class HomeController implements Initializable {
                 String nrb = ((Account)this.accountComboBox.getSelectionModel().getSelectedItem()).getAccountNbr();
                 switch (((Operation) this.operationCb.getSelectionModel().getSelectedItem())) {
                     case transfer:
-                        System.out.println("asd");
+                        TransferRequest request = this.prepareRequest(nrb, amount);
+                        TransferResponse transferResponse = ServiceUtil.transfer(request);
+                        updateBalance(transferResponse.getBalance());
                         break;
                     case deposit:
                         DepositResponse response = ServiceUtil.deposit(this.uid, nrb, amount);
@@ -164,5 +165,15 @@ public class HomeController implements Initializable {
 
     private boolean validateInputs(){
         return true;
+    }
+
+    private TransferRequest prepareRequest(String srcAccountNrb, Integer amount){
+        TransferRequest request = new TransferRequest();
+        request.setUuid(this.uid);
+        request.setTitle(this.titleTf.getText());
+        request.setSourceAccountNumber(srcAccountNrb);
+        request.setTargetAccountNumber(this.nrbTf.getText());
+        request.setAmount(amount);
+        return request;
     }
 }

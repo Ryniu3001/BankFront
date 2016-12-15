@@ -30,8 +30,8 @@
       <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="539.0" spacing="10.0">
          <children>
                   <Label maxWidth="100.0" prefHeight="16.0" prefWidth="80.0" text="Konto" />
-            <ComboBox fx:id="accountComboBox" onAction="#onChangeAccount" prefHeight="26.0" HBox.hgrow="ALWAYS" />
-                  <Label prefHeight="16.0" prefWidth="45.0" text="Stan:">
+            <ComboBox fx:id="accountComboBox" onAction="#onChangeAccount" prefHeight="26.0" prefWidth="266.0" HBox.hgrow="ALWAYS" />
+                  <Label minWidth="45.0" prefHeight="16.0" prefWidth="45.0" text="Stan:">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -39,7 +39,7 @@
                   <Insets left="20.0" />
                </HBox.margin>
                   </Label>
-            <Label fx:id="balanceLabel" textFill="#00800d">
+            <Label fx:id="balanceLabel" minWidth="40.0" textFill="#00800d">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -74,7 +74,7 @@
       <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" spacing="10.0">
          <children>
                   <Label fx:id="nrbLabel" prefWidth="80.0" text="Nr konta" />
-                  <TextField fx:id="nrbTf" prefHeight="26.0" prefWidth="215.0" promptText="Numer konta odbiorcy" />
+                  <TextField fx:id="nrbTf" prefHeight="26.0" prefWidth="255.0" promptText="Numer konta odbiorcy" />
          </children>
          <VBox.margin>
             <Insets bottom="10.0" />
