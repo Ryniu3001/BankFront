@@ -65,6 +65,9 @@ public class LoginController implements Initializable {
         } catch (BankException e) {
             FaultBean bean = e.getFaultInfo();
             errorLabel.setText(bean.getDetails());
+        } catch (Exception e){
+            //e.printStackTrace();
+            errorLabel.setText("Połączenie odrzucone!");
         }
     }
 

@@ -11,24 +11,38 @@ import javafx.scene.control.*;
 import pl.bank.bsr.*;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static bsr.home.Operation.transfer;
 
 public class HomeController implements Initializable {
-    @FXML private Label nameLabel;
-    @FXML private Label surnameLabel;
-    @FXML private Label balanceLabel;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label surnameLabel;
+    @FXML
+    private Label balanceLabel;
     private SimpleDoubleProperty balanceProperty;
-    @FXML private TextField nrbTf;
-    @FXML private TextField amountTf;
-    @FXML private TextField titleTf;
-    @FXML private Label nrbLabel;
-    @FXML private Label titleLabel;
-    @FXML private Label errorLabel;
-    @FXML private ComboBox accountComboBox;
-    @FXML private ComboBox operationCb;
+    @FXML
+    private TextField nrbTf;
+    @FXML
+    private TextField amountTf;
+    @FXML
+    private TextField titleTf;
+    @FXML
+    private Label nrbLabel;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private ComboBox accountComboBox;
+    @FXML
+    private ComboBox operationCb;
+    @FXML
+    private TextField srcNrbTf;
     private String uid;
     private ObservableList<Object> observableList = FXCollections.observableArrayList();
 
@@ -41,30 +55,41 @@ public class HomeController implements Initializable {
 
         this.balanceProperty = new SimpleDoubleProperty(-1);
         this.balanceLabel.textProperty().bind(balanceProperty.asString());
+        this.accountComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null)
+                this.srcNrbTf.setText(newValue.toString());
+            else
+                this.srcNrbTf.setText("");
+        });
     }
 
-    public void initData(LoginResponse loginResponse){
+    public void initData(LoginResponse loginResponse) {
         this.nameLabel.setText(loginResponse.getName());
         this.surnameLabel.setText(loginResponse.getSurname());
         this.uid = loginResponse.getUid();
-        if (loginResponse.getAccountList() != null && !loginResponse.getAccountList().isEmpty()){
-            for (AccountResponse acc : loginResponse.getAccountList())
+        this.fillAccountsInfo(loginResponse.getAccountList());
+    }
+
+    private void fillAccountsInfo(List<AccountResponse> list) {
+        this.observableList.clear();
+        if (list != null && !list.isEmpty()) {
+            for (AccountResponse acc : list)
                 observableList.add(new Account(acc.getAccNumber(), acc.getBalance()));
         }
         observableList.add("Dodaj nowe konto");
         accountComboBox.setItems(observableList);
         if (accountComboBox.getItems().size() > 1) {
             accountComboBox.getSelectionModel().select(0);
-            this.balanceProperty.setValue(((Account)accountComboBox.getSelectionModel().getSelectedItem()).getBalance());
+            this.balanceProperty.setValue(((Account) accountComboBox.getSelectionModel().getSelectedItem()).getBalance() / 100.0);
         }
     }
 
     @FXML
-    public void onChangeAccount(ActionEvent event){
-        if (accountComboBox.getValue() != null && !accountComboBox.getValue().toString().isEmpty()){
+    public void onChangeAccount(ActionEvent event) {
+        if (accountComboBox.getValue() != null && !accountComboBox.getValue().toString().isEmpty()) {
             //jesli wybrano dodaj nowe konto
-            if (accountComboBox.getSelectionModel().getSelectedIndex() == accountComboBox.getItems().size() - 1){
-                if (showConfirmationDialog()){
+            if (accountComboBox.getSelectionModel().getSelectedIndex() == accountComboBox.getItems().size() - 1) {
+                if (showConfirmationDialog()) {
                     try {
                         AccountResponse repsonse = ServiceUtil.addNewAccount(this.uid);
                         observableList.add(accountComboBox.getItems().size() - 1, new Account(repsonse.getAccNumber(), repsonse.getBalance()));
@@ -73,7 +98,7 @@ public class HomeController implements Initializable {
                         e.printStackTrace();
                     }
                 } else {
-                    //clear
+                    //clearSelection works but throws exception.
                     accountComboBox.setItems(null);
                     accountComboBox.setItems(this.observableList);
                 }
@@ -86,22 +111,34 @@ public class HomeController implements Initializable {
     }
 
     @FXML
-    public void onChangeOperation(ActionEvent event){
-        if (((Operation)this.operationCb.getSelectionModel().getSelectedItem()).name().equals(transfer.name())){
+    public void onChangeOperation(ActionEvent event) {
+        if (((Operation) this.operationCb.getSelectionModel().getSelectedItem()).name().equals(transfer.name())) {
             setVisible(true);
         } else {
             setVisible(false);
         }
     }
 
-    private void setVisible(boolean value){
+    @FXML
+    public void onRefreshAccounts(ActionEvent event) {
+        GetAccountsResponse response = null;
+        try {
+            response = ServiceUtil.getAccounts(this.uid);
+            this.fillAccountsInfo(response.getAccountList());
+        } catch (BankException e) {
+            this.errorLabel.setText(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void setVisible(boolean value) {
         this.titleTf.visibleProperty().setValue(value);
         this.nrbTf.visibleProperty().setValue(value);
         this.nrbLabel.visibleProperty().setValue(value);
         this.titleLabel.visibleProperty().setValue(value);
     }
 
-    private boolean showConfirmationDialog(){
+    private boolean showConfirmationDialog() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Potwierdzenie");
         alert.setHeaderText("Zakładanie nowego konta");
@@ -110,7 +147,7 @@ public class HomeController implements Initializable {
         ButtonType buttonTypeNo = new ButtonType("Nie", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonTypeYes){
+        if (result.get() == buttonTypeYes) {
             return true;
         } else {
             return false;
@@ -118,12 +155,12 @@ public class HomeController implements Initializable {
     }
 
     @FXML
-    public void onExecuteChange(ActionEvent event){
+    public void onExecuteChange(ActionEvent event) {
         this.errorLabel.setText("");
         try {
             if (validateInputs()) {
                 Integer amount = getAmountInteger();
-                String nrb = ((Account)this.accountComboBox.getSelectionModel().getSelectedItem()).getAccountNbr();
+                String nrb = ((Account) this.accountComboBox.getSelectionModel().getSelectedItem()).getAccountNbr();
                 switch (((Operation) this.operationCb.getSelectionModel().getSelectedItem())) {
                     case transfer:
                         TransferRequest request = this.prepareRequest(nrb, amount);
@@ -143,13 +180,13 @@ public class HomeController implements Initializable {
                 }
 
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             this.errorLabel.setText(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private Integer getAmountInteger(){
+    private Integer getAmountInteger() {
         String amountStr = this.amountTf.getText();
         amountStr = amountStr.replace(",", ".");
         Double amountDouble = Double.valueOf(amountStr) * 100;
@@ -157,17 +194,27 @@ public class HomeController implements Initializable {
         return amount;
     }
 
-    private void updateBalance(Integer newBalance){
+    private void updateBalance(Integer newBalance) {
         Account acc = (Account) this.accountComboBox.getSelectionModel().getSelectedItem();
         acc.setBalance(newBalance);
         this.balanceProperty.setValue(newBalance / 100.0);
     }
 
-    private boolean validateInputs(){
+    private void updateBalance(String accNumber, Integer newBalance) {
+        for (Object ob : this.observableList) {
+            if (ob instanceof Account) {
+                Account acc = (Account) ob;
+                if (acc.getAccountNbr().equals(accNumber))
+                    acc.setBalance(newBalance);
+            }
+        }
+    }
+
+    private boolean validateInputs() {
         return true;
     }
 
-    private TransferRequest prepareRequest(String srcAccountNrb, Integer amount){
+    private TransferRequest prepareRequest(String srcAccountNrb, Integer amount) {
         TransferRequest request = new TransferRequest();
         request.setUuid(this.uid);
         request.setTitle(this.titleTf.getText());

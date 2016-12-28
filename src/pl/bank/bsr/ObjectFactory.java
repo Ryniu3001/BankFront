@@ -27,6 +27,7 @@ public class ObjectFactory {
     private final static QName _WithdrawRequest_QNAME = new QName("http://bsr.bank.pl", "withdrawRequest");
     private final static QName _AccountResponse_QNAME = new QName("http://bsr.bank.pl", "accountResponse");
     private final static QName _NewAccountRequest_QNAME = new QName("http://bsr.bank.pl", "newAccountRequest");
+    private final static QName _GetAccountsResponse_QNAME = new QName("http://bsr.bank.pl", "getAccountsResponse");
     private final static QName _DepositRequest_QNAME = new QName("http://bsr.bank.pl", "depositRequest");
     private final static QName _LoginRequest_QNAME = new QName("http://bsr.bank.pl", "loginRequest");
     private final static QName _DepositMsg_QNAME = new QName("http://bsr.bank.pl", "depositMsg");
@@ -38,6 +39,7 @@ public class ObjectFactory {
     private final static QName _LogOutRequest_QNAME = new QName("http://bsr.bank.pl", "logOutRequest");
     private final static QName _BankServiceException_QNAME = new QName("http://bsr.bank.pl", "BankServiceException");
     private final static QName _TransferRequest_QNAME = new QName("http://bsr.bank.pl", "transferRequest");
+    private final static QName _GetAccountsRequest_QNAME = new QName("http://bsr.bank.pl", "getAccountsRequest");
     private final static QName _LogInResponse_QNAME = new QName("http://bsr.bank.pl", "logInResponse");
 
     /**
@@ -77,6 +79,14 @@ public class ObjectFactory {
      */
     public LoginRequest createLoginRequest() {
         return new LoginRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetAccountsResponse }
+     * 
+     */
+    public GetAccountsResponse createGetAccountsResponse() {
+        return new GetAccountsResponse();
     }
 
     /**
@@ -179,6 +189,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetAccountsResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://bsr.bank.pl", name = "getAccountsResponse")
+    public JAXBElement<GetAccountsResponse> createGetAccountsResponse(GetAccountsResponse value) {
+        return new JAXBElement<GetAccountsResponse>(_GetAccountsResponse_QNAME, GetAccountsResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link DepositMsg }{@code >}}
      * 
      */
@@ -275,6 +294,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://bsr.bank.pl", name = "transferRequest")
     public JAXBElement<TransferRequest> createTransferRequest(TransferRequest value) {
         return new JAXBElement<TransferRequest>(_TransferRequest_QNAME, TransferRequest.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://bsr.bank.pl", name = "getAccountsRequest")
+    public JAXBElement<String> createGetAccountsRequest(String value) {
+        return new JAXBElement<String>(_GetAccountsRequest_QNAME, String.class, null, value);
     }
 
     /**

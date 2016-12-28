@@ -46,6 +46,7 @@ public class SOAPHandler implements javax.xml.ws.handler.soap.SOAPHandler<SOAPMe
         }
 
         SOAPMessage message = smc.getMessage();
+
         try {
             message.writeTo(out);
             out.println("");   // just to add a newline

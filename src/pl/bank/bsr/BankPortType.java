@@ -115,6 +115,24 @@ public interface BankPortType {
     /**
      * 
      * @param payload
+     * @return
+     *     returns pl.bank.bsr.GetAccountsResponse
+     * @throws BankException
+     */
+    @WebMethod
+    @WebResult(name = "getAccountsResponse", targetNamespace = "http://bsr.bank.pl", partName = "getAccountsResponse")
+    @Action(input = "http://bsr.bank.pl/BankPortType/getAccountsRequest", output = "http://bsr.bank.pl/BankPortType/getAccountsResponse", fault = {
+        @FaultAction(className = BankException.class, value = "http://bsr.bank.pl/BankPortType/getAccounts/Fault/BankServiceException")
+    })
+    public GetAccountsResponse getAccounts(
+        @WebParam(name = "getAccountsRequest", targetNamespace = "http://bsr.bank.pl", partName = "payload")
+        String payload)
+        throws BankException
+    ;
+
+    /**
+     * 
+     * @param payload
      * @throws BankException
      */
     @WebMethod

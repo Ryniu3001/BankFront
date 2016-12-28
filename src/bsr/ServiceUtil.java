@@ -51,6 +51,11 @@ public class ServiceUtil {
         return port.transfer(payload);
     }
 
+    public static GetAccountsResponse getAccounts(String uuid) throws BankException {
+        BankPortType port = getBankServicePort();
+        return port.getAccounts(uuid);
+    }
+
     private static BankPortType getBankServicePort(){
         BankService bankService = new BankService();
         BankPortType port = bankService.getBankPort();
