@@ -7,14 +7,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import pl.bank.bsr.BankException;
 import pl.bank.bsr.FaultBean;
 import pl.bank.bsr.LoginResponse;
@@ -22,6 +20,8 @@ import pl.bank.bsr.LoginResponse;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static bsr.Util.openNewWindow;
 
 public class LoginController implements Initializable {
 
@@ -40,16 +40,13 @@ public class LoginController implements Initializable {
         errorLabel.setText("");
         String login = loginField.getText();
         String password = passwordField.getText();
-        LoginResponse response = null;
+        LoginResponse response;
         try {
             response = ServiceUtil.logIn(login, password);
             double x = ((Node) (event.getSource())).getScene().getWindow().getX();
             double y = ((Node) (event.getSource())).getScene().getWindow().getY();
 
-            Parent root;
-
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("bsr/home/FXMLHome.fxml"));
-            // root = FXMLLoader.load(getClass().getClassLoader().getResource("bsr/home/FXMLHome.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Bank");
             stage.setScene(new Scene(loader.load(), 550, 450));
@@ -80,28 +77,10 @@ public class LoginController implements Initializable {
 
     @FXML
     public void onRegisterAction(ActionEvent event){
-        openNewWindow(((Node)(event.getSource())).getScene().getWindow(), "bsr/register/FXMLRegister.fxml", "Rejestracja");
+        openNewWindow(((Node)(event.getSource())).getScene().getWindow(), "bsr/register/FXMLRegister.fxml", "Rejestracja", true);
     }
 
-    private void openNewWindow(Window windowToClose, String name, String title){
-        double x = windowToClose.getX();
-        double y = windowToClose.getY();
 
-        Parent root;
-        try {
-            root = FXMLLoader.load(getClass().getClassLoader().getResource(name));
-            Stage stage = new Stage();
-            stage.setTitle(title);
-            stage.setScene(new Scene(root, 450, 450));
-            stage.setX(x);
-            stage.setY(y);
-            stage.show();
-            windowToClose.hide();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void setCredentials(String user, String password){
         this.loginField.setText(user);

@@ -1,15 +1,24 @@
 package bsr.home;
 
 import bsr.ServiceUtil;
+import bsr.Util;
+import bsr.history.HistoryController;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import pl.bank.bsr.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +52,8 @@ public class HomeController implements Initializable {
     private ComboBox operationCb;
     @FXML
     private TextField srcNrbTf;
+    @FXML
+    private Button historyBtn;
     private String uid;
     private ObservableList<Object> observableList = FXCollections.observableArrayList();
 
@@ -56,10 +67,14 @@ public class HomeController implements Initializable {
         this.balanceProperty = new SimpleDoubleProperty(-1);
         this.balanceLabel.textProperty().bind(balanceProperty.asString());
         this.accountComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null)
+            if (newValue != null) {
                 this.srcNrbTf.setText(newValue.toString());
-            else
+                this.historyBtn.setDisable(false);
+            } else {
                 this.srcNrbTf.setText("");
+                this.historyBtn.setDisable(true);
+            }
+
         });
     }
 
@@ -120,7 +135,25 @@ public class HomeController implements Initializable {
     }
 
     @FXML
+    public void onHistoryOperation(ActionEvent event) {
+        String accNrb = this.srcNrbTf.getText();
+        GetHistoryResponse response = null;
+        try {
+            response = ServiceUtil.getHistory(this.uid, accNrb);
+            this.openHistory(((Node)(event.getSource())).getScene().getWindow(), "bsr/history/FXMLHistory.fxml", "Historia " +
+                    ((Account)this.accountComboBox.getSelectionModel().getSelectedItem()).getAccountNbr(), response);
+        } catch (BankException e) {
+            this.errorLabel.setText(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void onRefreshAccounts(ActionEvent event) {
+        refreshAccounts();
+    }
+
+    private void refreshAccounts(){
         GetAccountsResponse response = null;
         try {
             response = ServiceUtil.getAccounts(this.uid);
@@ -165,7 +198,7 @@ public class HomeController implements Initializable {
                     case transfer:
                         TransferRequest request = this.prepareRequest(nrb, amount);
                         TransferResponse transferResponse = ServiceUtil.transfer(request);
-                        updateBalance(transferResponse.getBalance());
+                        refreshAccounts();
                         break;
                     case deposit:
                         DepositResponse response = ServiceUtil.deposit(this.uid, nrb, amount);
@@ -182,7 +215,7 @@ public class HomeController implements Initializable {
             }
         } catch (Exception e) {
             this.errorLabel.setText(e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -222,5 +255,26 @@ public class HomeController implements Initializable {
         request.setTargetAccountNumber(this.nrbTf.getText());
         request.setAmount(amount);
         return request;
+    }
+
+    private void openHistory(Window parentWindow, String name, String title, GetHistoryResponse history){
+        double x = parentWindow.getX();
+        double y = parentWindow.getY();
+        FXMLLoader loader = null;
+        try {
+            loader = new FXMLLoader(Util.class.getClassLoader().getResource(name));
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(new Scene(loader.load(), 450, 450));
+            stage.setX(x);
+            stage.setY(y);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            HistoryController controller = loader.getController();
+            controller.fillData(history);
+            stage.showAndWait();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

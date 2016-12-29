@@ -56,6 +56,14 @@ public class ServiceUtil {
         return port.getAccounts(uuid);
     }
 
+    public static GetHistoryResponse getHistory(String uuid, String accNrb) throws BankException {
+        BankPortType port = getBankServicePort();
+        GetHistoryRequest request = new GetHistoryRequest();
+        request.setAccountNumber(accNrb);
+        request.setUid(uuid);
+        return port.getHistory(request);
+    }
+
     private static BankPortType getBankServicePort(){
         BankService bankService = new BankService();
         BankPortType port = bankService.getBankPort();

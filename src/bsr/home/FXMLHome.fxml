@@ -51,7 +51,7 @@
                </font>
             </Label>
             <Pane maxWidth="600.0" prefHeight="10.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                  <Button alignment="CENTER_RIGHT" maxWidth="100.0" minWidth="71.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="71.0" text="Historia" textAlignment="RIGHT">
+                  <Button fx:id="historyBtn" alignment="CENTER_RIGHT" maxWidth="100.0" minWidth="71.0" mnemonicParsing="false" onAction="#onHistoryOperation" prefHeight="26.0" prefWidth="71.0" text="Historia" textAlignment="RIGHT">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin></Button>
@@ -107,7 +107,7 @@
       </HBox>
       <HBox maxWidth="700.0" prefHeight="40.0" prefWidth="200.0">
          <children>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onExecuteChange" prefHeight="0.0" prefWidth="580.0" text="WYKONAJ" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+                  <Button contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onExecuteChange" prefHeight="0.0" prefWidth="580.0" text="WYKONAJ" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
       <HBox maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="200.0">

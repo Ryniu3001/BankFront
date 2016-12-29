@@ -133,6 +133,24 @@ public interface BankPortType {
     /**
      * 
      * @param payload
+     * @return
+     *     returns pl.bank.bsr.GetHistoryResponse
+     * @throws BankException
+     */
+    @WebMethod
+    @WebResult(name = "getHistoryResponse", targetNamespace = "http://bsr.bank.pl", partName = "getHistoryResponse")
+    @Action(input = "http://bsr.bank.pl/BankPortType/getHistoryRequest", output = "http://bsr.bank.pl/BankPortType/getHistoryResponse", fault = {
+        @FaultAction(className = BankException.class, value = "http://bsr.bank.pl/BankPortType/getHistory/Fault/BankServiceException")
+    })
+    public GetHistoryResponse getHistory(
+        @WebParam(name = "getHistoryRequest", targetNamespace = "http://bsr.bank.pl", partName = "payload")
+        GetHistoryRequest payload)
+        throws BankException
+    ;
+
+    /**
+     * 
+     * @param payload
      * @throws BankException
      */
     @WebMethod

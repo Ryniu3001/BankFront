@@ -33,9 +33,11 @@ public class ObjectFactory {
     private final static QName _DepositMsg_QNAME = new QName("http://bsr.bank.pl", "depositMsg");
     private final static QName _CreateAccountResponse_QNAME = new QName("http://bsr.bank.pl", "createAccountResponse");
     private final static QName _DepositResponse_QNAME = new QName("http://bsr.bank.pl", "depositResponse");
+    private final static QName _GetHistoryResponse_QNAME = new QName("http://bsr.bank.pl", "getHistoryResponse");
     private final static QName _WithdrawResponse_QNAME = new QName("http://bsr.bank.pl", "withdrawResponse");
     private final static QName _TransferResponse_QNAME = new QName("http://bsr.bank.pl", "transferResponse");
     private final static QName _RegisterRequest_QNAME = new QName("http://bsr.bank.pl", "registerRequest");
+    private final static QName _GetHistoryRequest_QNAME = new QName("http://bsr.bank.pl", "getHistoryRequest");
     private final static QName _LogOutRequest_QNAME = new QName("http://bsr.bank.pl", "logOutRequest");
     private final static QName _BankServiceException_QNAME = new QName("http://bsr.bank.pl", "BankServiceException");
     private final static QName _TransferRequest_QNAME = new QName("http://bsr.bank.pl", "transferRequest");
@@ -63,6 +65,14 @@ public class ObjectFactory {
      */
     public DepositResponse createDepositResponse() {
         return new DepositResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetHistoryResponse }
+     * 
+     */
+    public GetHistoryResponse createGetHistoryResponse() {
+        return new GetHistoryResponse();
     }
 
     /**
@@ -138,6 +148,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetHistoryRequest }
+     * 
+     */
+    public GetHistoryRequest createGetHistoryRequest() {
+        return new GetHistoryRequest();
+    }
+
+    /**
      * Create an instance of {@link RegisterRequest }
      * 
      */
@@ -159,6 +177,14 @@ public class ObjectFactory {
      */
     public WithdrawResponse createWithdrawResponse() {
         return new WithdrawResponse();
+    }
+
+    /**
+     * Create an instance of {@link Operation }
+     * 
+     */
+    public Operation createOperation() {
+        return new Operation();
     }
 
     /**
@@ -243,6 +269,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetHistoryResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://bsr.bank.pl", name = "getHistoryResponse")
+    public JAXBElement<GetHistoryResponse> createGetHistoryResponse(GetHistoryResponse value) {
+        return new JAXBElement<GetHistoryResponse>(_GetHistoryResponse_QNAME, GetHistoryResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link WithdrawResponse }{@code >}}
      * 
      */
@@ -267,6 +302,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://bsr.bank.pl", name = "registerRequest")
     public JAXBElement<RegisterRequest> createRegisterRequest(RegisterRequest value) {
         return new JAXBElement<RegisterRequest>(_RegisterRequest_QNAME, RegisterRequest.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetHistoryRequest }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://bsr.bank.pl", name = "getHistoryRequest")
+    public JAXBElement<GetHistoryRequest> createGetHistoryRequest(GetHistoryRequest value) {
+        return new JAXBElement<GetHistoryRequest>(_GetHistoryRequest_QNAME, GetHistoryRequest.class, null, value);
     }
 
     /**
