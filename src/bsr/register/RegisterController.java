@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import pl.bank.bsr.BankException;
 import pl.bank.bsr.FaultBean;
 
+import javax.xml.ws.WebServiceException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -49,6 +50,8 @@ public class RegisterController implements Initializable {
         } catch (BankException e) {
             FaultBean bean = e.getFaultInfo();
             errorLabel.setText(bean.getDetails());
+        } catch (WebServiceException e){
+            errorLabel.setText("Połączenie odrzucone");
         }
 
     }

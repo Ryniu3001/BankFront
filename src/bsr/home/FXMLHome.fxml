@@ -107,12 +107,12 @@
       </HBox>
       <HBox maxWidth="700.0" prefHeight="40.0" prefWidth="200.0">
          <children>
-                  <Button contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onExecuteChange" prefHeight="0.0" prefWidth="580.0" text="WYKONAJ" HBox.hgrow="ALWAYS" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onExecuteChange" prefHeight="0.0" prefWidth="580.0" text="WYKONAJ" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
       <HBox maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="200.0">
          <children>
-                  <Label fx:id="errorLabel" maxWidth="1.7976931348623157E308" prefHeight="16.0" prefWidth="536.0" textFill="RED" HBox.hgrow="ALWAYS">
+                  <Label fx:id="errorLabel" maxWidth="1.7976931348623157E308" prefHeight="16.0" prefWidth="536.0" textAlignment="CENTER" textFill="RED" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>

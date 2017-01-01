@@ -46,6 +46,15 @@ public class ServiceUtil {
         return port.deposit(payload);
     }
 
+    public static WithdrawResponse withdraw(String uid, String accNumber, Integer value) throws BankException {
+        BankPortType port = getBankServicePort();
+        WithdrawMsg payload = new WithdrawMsg();
+        payload.setUid(uid);
+        payload.setAccountNumber(accNumber);
+        payload.setAmount(value);
+        return port.withdraw(payload);
+    }
+
     public static TransferResponse transfer(TransferRequest payload) throws BankException {
         BankPortType port = getBankServicePort();
         return port.transfer(payload);

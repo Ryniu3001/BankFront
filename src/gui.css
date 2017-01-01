@@ -1,4 +1,14 @@
-.text-field.error {
-    -fx-text-box-border: red ;
-    -fx-focus-color: red ;
+.table-row-cell:selected {
+    -fx-background-color: #110088;
+}
+.table-row-cell:selected .text {
+    -fx-fill: #fff2f6;
+}
+
+.dodatnie {
+    -fx-background-color: lightgreen;
+}
+
+.ujemne {
+    -fx-background-color: lightcoral;
 }

@@ -77,7 +77,7 @@ public class LoginController implements Initializable {
 
     @FXML
     public void onRegisterAction(ActionEvent event){
-        openNewWindow(((Node)(event.getSource())).getScene().getWindow(), "bsr/register/FXMLRegister.fxml", "Rejestracja", true);
+        openNewWindow(((Node)(event.getSource())).getScene().getWindow(), "bsr/register/FXMLRegister.fxml", "Rejestracja", false);
     }
 
 

@@ -13,6 +13,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -143,7 +145,7 @@ public class HomeController implements Initializable {
             this.openHistory(((Node)(event.getSource())).getScene().getWindow(), "bsr/history/FXMLHistory.fxml", "Historia " +
                     ((Account)this.accountComboBox.getSelectionModel().getSelectedItem()).getAccountNbr(), response);
         } catch (BankException e) {
-            this.errorLabel.setText(e.getMessage());
+            printInfo(e.getMessage(), Color.RED);
             e.printStackTrace();
         }
     }
@@ -159,7 +161,7 @@ public class HomeController implements Initializable {
             response = ServiceUtil.getAccounts(this.uid);
             this.fillAccountsInfo(response.getAccountList());
         } catch (BankException e) {
-            this.errorLabel.setText(e.getMessage());
+            printInfo(e.getMessage(), Color.RED);
             e.printStackTrace();
         }
     }
@@ -205,7 +207,8 @@ public class HomeController implements Initializable {
                         updateBalance(response.getBalance());
                         break;
                     case withdraw:
-                        System.out.println("asd");
+                        WithdrawResponse withdrawResponse = ServiceUtil.withdraw(this.uid, nrb, amount);
+                        updateBalance(withdrawResponse.getBalance());
                         break;
                     default:
                         System.out.println("default");
@@ -213,17 +216,25 @@ public class HomeController implements Initializable {
                 }
 
             }
+
+            printInfo("Operation completed successfully", Color.GREEN);
+
         } catch (Exception e) {
-            this.errorLabel.setText(e.getMessage());
+            printInfo(e.getMessage(), Color.RED);
             //e.printStackTrace();
         }
     }
 
     private Integer getAmountInteger() {
-        String amountStr = this.amountTf.getText();
-        amountStr = amountStr.replace(",", ".");
-        Double amountDouble = Double.valueOf(amountStr) * 100;
-        Integer amount = amountDouble.intValue();
+        Integer amount = -1;
+        try {
+            String amountStr = this.amountTf.getText();
+            amountStr = amountStr.replace(",", ".");
+            Double amountDouble = Double.valueOf(amountStr) * 100;
+            amount = amountDouble.intValue();
+        } catch (NumberFormatException e){
+            throw new NumberFormatException("Invalid amount.");
+        }
         return amount;
     }
 
@@ -255,6 +266,11 @@ public class HomeController implements Initializable {
         request.setTargetAccountNumber(this.nrbTf.getText());
         request.setAmount(amount);
         return request;
+    }
+
+    private void printInfo(String text, Paint color){
+        this.errorLabel.setTextFill(color);
+        this.errorLabel.setText(text);
     }
 
     private void openHistory(Window parentWindow, String name, String title, GetHistoryResponse history){
