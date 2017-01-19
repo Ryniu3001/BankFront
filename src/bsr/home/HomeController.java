@@ -88,6 +88,9 @@ public class HomeController implements Initializable {
     }
 
     private void fillAccountsInfo(List<AccountResponse> list) {
+        Integer idx = this.accountComboBox.getSelectionModel().getSelectedIndex();
+        if (idx == -1) //przy otwarciu okienka
+            idx = 0;
         this.observableList.clear();
         if (list != null && !list.isEmpty()) {
             for (AccountResponse acc : list)
@@ -96,7 +99,7 @@ public class HomeController implements Initializable {
         observableList.add("Dodaj nowe konto");
         accountComboBox.setItems(observableList);
         if (accountComboBox.getItems().size() > 1) {
-            accountComboBox.getSelectionModel().select(0);
+            accountComboBox.getSelectionModel().select(idx.intValue());
             this.balanceProperty.setValue(((Account) accountComboBox.getSelectionModel().getSelectedItem()).getBalance() / 100.0);
         }
     }
@@ -242,16 +245,6 @@ public class HomeController implements Initializable {
         Account acc = (Account) this.accountComboBox.getSelectionModel().getSelectedItem();
         acc.setBalance(newBalance);
         this.balanceProperty.setValue(newBalance / 100.0);
-    }
-
-    private void updateBalance(String accNumber, Integer newBalance) {
-        for (Object ob : this.observableList) {
-            if (ob instanceof Account) {
-                Account acc = (Account) ob;
-                if (acc.getAccountNbr().equals(accNumber))
-                    acc.setBalance(newBalance);
-            }
-        }
     }
 
     private boolean validateInputs() {
