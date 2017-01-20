@@ -28,6 +28,9 @@ import java.util.ResourceBundle;
 
 import static bsr.home.Operation.transfer;
 
+/**
+ * Kontroler głównego okna aplikacji
+ */
 public class HomeController implements Initializable {
     @FXML
     private Label nameLabel;
@@ -80,6 +83,10 @@ public class HomeController implements Initializable {
         });
     }
 
+    /**
+     * Uzupełnia okno danymi
+     * @param loginResponse Odpowiedź z usługi logowania
+     */
     public void initData(LoginResponse loginResponse) {
         this.nameLabel.setText(loginResponse.getName());
         this.surnameLabel.setText(loginResponse.getSurname());
@@ -104,6 +111,10 @@ public class HomeController implements Initializable {
         }
     }
 
+    /**
+     * Metoda odpowiedzialna obsługę operacji wykonywanym w comboBoxie z wyborem konta.
+     * @param event
+     */
     @FXML
     public void onChangeAccount(ActionEvent event) {
         if (accountComboBox.getValue() != null && !accountComboBox.getValue().toString().isEmpty()) {
@@ -130,6 +141,10 @@ public class HomeController implements Initializable {
         }
     }
 
+    /**
+     * Metoda odpowiedzialna za obsługę akcji związnej z comboBoxem zawierającym operacje do wykonania.
+     * @param event
+     */
     @FXML
     public void onChangeOperation(ActionEvent event) {
         if (((Operation) this.operationCb.getSelectionModel().getSelectedItem()).name().equals(transfer.name())) {
@@ -139,6 +154,10 @@ public class HomeController implements Initializable {
         }
     }
 
+    /**
+     * Otworzenie okienka historii
+     * @param event
+     */
     @FXML
     public void onHistoryOperation(ActionEvent event) {
         String accNrb = this.srcNrbTf.getText();
@@ -228,11 +247,14 @@ public class HomeController implements Initializable {
         }
     }
 
-    private Integer getAmountInteger() {
+    private Integer getAmountInteger() throws Exception {
         Integer amount = -1;
         try {
             String amountStr = this.amountTf.getText();
             amountStr = amountStr.replace(",", ".");
+            int dotIndex = amountStr.indexOf('.');
+            if (dotIndex != -1 && amountStr.length() - dotIndex - 1 > 2)
+                throw new Exception("Wrong amount format.");
             Double amountDouble = Double.valueOf(amountStr) * 100;
             amount = amountDouble.intValue();
         } catch (NumberFormatException e){

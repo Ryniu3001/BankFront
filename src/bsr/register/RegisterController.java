@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
+ * Kontroler okna rejestracji
  * Created by marcin on 01.12.16.
  */
 public class RegisterController implements Initializable {
@@ -37,6 +38,10 @@ public class RegisterController implements Initializable {
 
     }
 
+    /**
+     * Rejestruje użytkownika.
+     * @param event
+     */
     @FXML
     public void onRegisterAction(ActionEvent event){
         errorLabel.setText("");

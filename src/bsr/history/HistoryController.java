@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+/**
+ * Kontroler okna historii
+ */
 public class HistoryController implements Initializable {
     @FXML
     private TableView<Operation> tableView;
@@ -40,6 +43,10 @@ public class HistoryController implements Initializable {
 
     }
 
+    /**
+     * Wypełnia okienko historii danymi z usługi
+     * @param reponse
+     */
     public void fillData(GetHistoryResponse reponse){
         List<Operation> operations = reponse.getOperations().stream().map(operation -> new Operation(operation)).collect(Collectors.toList());
         this.data.addAll(operations);

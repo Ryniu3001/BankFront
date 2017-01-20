@@ -9,6 +9,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Model pojedynczego wiersza w oknie historii
+ */
 public class Operation {
     private final SimpleStringProperty title;
     private final SimpleStringProperty type;

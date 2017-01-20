@@ -1,6 +1,7 @@
 package bsr.home;
 
 /**
+ * Przechowuje informacje o koncie bankowym uzytkownika
  * Created by marcin on 03.12.16.
  */
 public class Account {

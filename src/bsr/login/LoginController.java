@@ -35,6 +35,10 @@ public class LoginController implements Initializable {
         loginButton.setDefaultButton(true);
     }
 
+    /**
+     * Logowanie do aplikacji (wyzwalane po kliknięciu Zaloguj)
+     * @param event
+     */
     @FXML
     public void onLoginAction(ActionEvent event){
         errorLabel.setText("");
@@ -68,6 +72,10 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Akcja "Anuluj" - zamyka aplikacje
+     * @param event
+     */
     @FXML
     public void onCancelAction(ActionEvent event){
         Button closeButton = (Button)event.getSource();
@@ -75,13 +83,20 @@ public class LoginController implements Initializable {
         stage.close();
     }
 
+    /**
+     * Otwiera okienko rejestracji.
+     * @param event
+     */
     @FXML
     public void onRegisterAction(ActionEvent event){
         openNewWindow(((Node)(event.getSource())).getScene().getWindow(), "bsr/register/FXMLRegister.fxml", "Rejestracja", false);
     }
 
-
-
+    /**
+     * Ustawia login i hasło.
+     * @param user  Login
+     * @param password Haslo
+     */
     public void setCredentials(String user, String password){
         this.loginField.setText(user);
         this.passwordField.setText(password);

@@ -6,6 +6,7 @@ import java.util.Date;
 
 /**
  * Created by marcin on 01.01.17.
+ * Klasa daty ze zmienionym domyślnym formatem wyświetlania
  */
 public class MyDate extends Date {
     private static final DateFormat dateFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy");

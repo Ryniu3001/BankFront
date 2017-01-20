@@ -7,6 +7,7 @@ import javax.xml.ws.handler.Handler;
 import java.util.List;
 
 /**
+ * Klasa pośrednicząca w wywołaniach usług.
  * Created by marcin on 01.12.16.
  */
 public class ServiceUtil {
@@ -73,6 +74,10 @@ public class ServiceUtil {
         return port.getHistory(request);
     }
 
+    /**
+     * Tworzy i zwraca obiekt usługi
+     * @return
+     */
     private static BankPortType getBankServicePort(){
         BankService bankService = new BankService();
         BankPortType port = bankService.getBankPort();
